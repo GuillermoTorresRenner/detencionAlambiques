@@ -8,10 +8,7 @@ const routes = [
         path: "/estado-alambiques",
         component: () => import("src/pages/EstadoAlambiques.vue"),
       },
-      {
-        path: "/ingresar-detenciones",
-        component: () => import("src/pages/IngresarDetenciones.vue"),
-      },
+
       {
         path: "/validar-detenciones",
         component: () => import("src/pages/ValidarDetenciones.vue"),
@@ -19,6 +16,10 @@ const routes = [
       {
         path: "/reportes-detenciones",
         component: () => import("src/pages/ReportesDetenciones.vue"),
+      },
+      {
+        path: "/estado-salas",
+        component: () => import("src/pages/EstadoSalas.vue"),
       },
     ],
   },

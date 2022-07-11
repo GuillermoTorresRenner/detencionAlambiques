@@ -6,7 +6,23 @@ export const useAlambiques = defineStore("alambiques", {
   state: () => ({
     alambique: {},
     alambiques: [],
-    detencion: {},
+    detencion: {
+      alambique: "",
+      aprobacionAdministrador: false,
+      causaDetencion: "",
+      destilador: "",
+      duracionDetencion: 0,
+      estado: "",
+      fechaDetecion: "",
+      fechaRestablecimiento: "",
+      horaDetencion: "",
+      horaRestablecimiento: "",
+      id: "",
+      momentoDetencion: 0,
+      momentoRestablecimiento: 0,
+      notas: "",
+      sala: "",
+    },
     detenciones: [],
   }),
   getters: {
@@ -61,16 +77,6 @@ export const useAlambiques = defineStore("alambiques", {
           ? "detención programada"
           : "detención por falla";
     },
-    findAlambiqueByNameAndStartIt(nombre) {
-      const a = this.alambiques.filter((alam) => alam.nombre === nombre);
-      a.forEach((alam) => {
-        this.alambique = alam;
-      });
-
-      this.alambique.estado = "operativo";
-      this.alambique.desde = "";
-      this.alambique.causa = "";
-    },
 
     addAlambique(alambique) {
       this.alambiques.push(alambique);
@@ -94,6 +100,9 @@ export const useAlambiques = defineStore("alambiques", {
           return -1;
         }
       });
+    },
+    setAlambique(alam) {
+      this.alambique = alam;
     },
 
     //Acciones de detenciones
@@ -121,8 +130,8 @@ export const useAlambiques = defineStore("alambiques", {
       });
     },
 
-    setDetencion(detencion) {
-      this.detencion = detencion;
+    setDetencion(det) {
+      this.detencion = det;
     },
 
     findDetencionByIdAndStartIt(id) {
@@ -173,6 +182,67 @@ export const useAlambiques = defineStore("alambiques", {
       this.detencion.aprobacionAdministrador = validacion;
       this.detenciones.push(this.detencion);
       await setDoc(doc(db, "detenciones", this.detencion.id), this.detencion);
+    },
+    resetDetencion() {
+      this.detencion = {
+        alambique: "",
+        aprobacionAdministrador: false,
+        causaDetencion: "",
+        destilador: "",
+        duracionDetencion: 0,
+        estado: "",
+        fechaDetecion: "",
+        fechaRestablecimiento: "",
+        horaDetencion: "",
+        horaRestablecimiento: "",
+        id: "",
+        momentoDetencion: 0,
+        momentoRestablecimiento: 0,
+        notas: "",
+        sala: "",
+      };
+    },
+
+    findDetencionByNameAndStartIt(nombre) {
+      this.getDetencionesActivas
+        .filter((d) => d.alambique === nombre)
+        .forEach((a) => {
+          this.setDetencion(a);
+        });
+      const date = new Date();
+      this.detencion.estado = "operativo";
+
+      let d, m, y, h, min, s;
+      d =
+        date.getDate().toString().length > 1
+          ? date.getDate().toString()
+          : "0" + date.getDate();
+      m =
+        (date.getMonth() + 1).toString.length > 1
+          ? (date.getMonth() + 1).toString()
+          : "0" + (date.getMonth() + 1).toString();
+      y = date.getFullYear();
+
+      h =
+        date.getHours().toString().length > 1
+          ? date.getHours().toString()
+          : "0" + date.getHours().toString();
+      min =
+        date.getMinutes().toString().length > 1
+          ? date.getMinutes().toString()
+          : "0" + date.getMinutes().toString();
+      s =
+        date.getSeconds().toString() > 1
+          ? date.getSeconds().toString()
+          : "0" + date.getSeconds().toString();
+
+      this.detencion.fechaRestablecimiento = d + "/" + m + "/" + y;
+      this.detencion.horaRestablecimiento = h + ":" + min + ":" + s;
+      this.detencion.momentoRestablecimiento = date.getTime() / 3600000;
+      //Cálculo de tiempo de detención
+      this.detencion.duracionDetencion = (
+        this.detencion.momentoRestablecimiento - this.detencion.momentoDetencion
+      ).toFixed(1);
     },
   },
 });

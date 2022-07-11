@@ -49,47 +49,39 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref } from "vue";
+<script setup>
+import { defineComponent, ref, onMounted } from "vue";
 import { db, auth } from "src/boot/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { useUsuarios } from "../stores/useUsuarios";
 import { useRouter } from "vue-router";
 import { useAuth } from "@vueuse/firebase/useAuth";
+import { LocalStorage } from "quasar";
 
-const { isAuthenticated } = useAuth(auth);
-export default defineComponent({
-  name: "IndexPage",
-  setup() {
-    const usr = ref("");
-    const pass = ref("");
-    const usuario = useUsuarios();
+const { isAuthenticated, user } = useAuth(auth);
 
-    let e = ref(false);
-    const router = useRouter();
-    const ingresar = async () => {
-      try {
-        await signInWithEmailAndPassword(auth, usr.value, pass.value)
-          .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            usuario.findUsuario(usr.value);
-            router.push("/estado-alambiques");
-          })
-          .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            e.value = true;
-            pass.value = "";
-          });
-      } catch (error) {}
-    };
-    return {
-      usr,
-      pass,
-      ingresar,
-      e,
-    };
-  },
-});
+const usr = ref("");
+const pass = ref("");
+const usuario = useUsuarios();
+
+let e = ref(false);
+const router = useRouter();
+const ingresar = async () => {
+  try {
+    await signInWithEmailAndPassword(auth, usr.value.toLowerCase(), pass.value)
+      .then((userCredential) => {
+        // Signed in
+        const uid = userCredential.user.uid;
+        usuario.findUsuario(uid);
+
+        router.push("/estado-alambiques");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        e.value = true;
+        pass.value = "";
+      });
+  } catch (error) {}
+};
 </script>

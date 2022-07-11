@@ -3,7 +3,7 @@
     <div class="q-pa-md">
       <q-table
         title="Reportes Detenciones"
-        :rows="detenciones.getDetenciones"
+        :rows="rows"
         :columns="columns"
         color="primary"
         row-key="name"
@@ -40,7 +40,7 @@
 <script>
 import { exportFile, useQuasar } from "quasar";
 import { useAlambiques } from "src/stores/useAlambiques";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 const columns = [
   {
@@ -148,11 +148,13 @@ function wrapCsvValue(val, formatFn, row) {
 export default {
   setup() {
     const $q = useQuasar();
+    const rows = ref(detenciones.getDetenciones);
 
     return {
       columns,
       detenciones,
       filter: ref(""),
+      rows,
 
       exportTable() {
         // naive encoding to csv format

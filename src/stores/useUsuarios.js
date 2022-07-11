@@ -1,40 +1,25 @@
 import { defineStore } from "pinia";
+import { query, where, collection, getDoc, doc } from "firebase/firestore";
 import { db } from "src/boot/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { LocalStorage } from "quasar";
 
-export const useUsuarios = defineStore("usuarios", {
+export const useUsuarios = defineStore("usuario", {
   state: () => ({
-    usuario: { rol: "sin rol", email: "", sala: "" },
+    usuario: { rol: "", nombre: "", sala: "" },
+    usuarios: [],
   }),
   getters: {
     getUsuario: (state) => state.usuario,
+    getUsuarios: (state) => state.usuarios,
   },
   actions: {
-    async findUsuario(e) {
-      const q = query(collection(db, "usuarios"), where("email", "==", e));
-      const u = await getDocs(q);
-      u.forEach((element) => {
-        this.usuario = element.data();
-      });
+    async findUsuario(uid) {
+      const q = await getDoc(doc(db, "usuarios", uid));
+      this.usuario = q.data();
       localStorage.setItem("usuario", JSON.stringify(this.usuario));
     },
 
     setUsuario(usr) {
       this.usuario = usr;
-    },
-    resetUsuario() {
-      this.usuario.email = "";
-      this.usuario.rol = "";
-    },
-    setUsuarioInLocalStorage() {
-      localStorage.setItem("usuario", JSON.stringify(this.usuario));
-    },
-    getUsuarioFromLocalStorage() {
-      this.usuario = JSON.parse(localStorage.getItem("usuario"));
-    },
-    removeUsuarioFromLocalStorage() {
-      localStorage.removeItem("usuario");
     },
   },
 });
