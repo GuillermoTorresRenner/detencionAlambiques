@@ -12,7 +12,8 @@
         />
 
         <q-toolbar-title class="text-center">
-          {{ usr.getUsuario.nombre }} {{ usr.getUsuario.sala }}</q-toolbar-title
+          {{ usr.getUsuario.nombre.toUpperCase() }}
+          {{ usr.getUsuario.sala.toUpperCase() }}</q-toolbar-title
         >
         <q-btn
           color="negative"

@@ -57,18 +57,9 @@ const reportarDetencion = async () => {
     detencion.getDetencion.alambique,
     detencion.getDetencion.causaDetencion
   );
-  //Guardado en colección detenciones, daatos tomados desde el objeto detenciones de esta vista.
-  await setDoc(
-    doc(db, "detenciones", detencion.getDetencion.id),
-    detencion.getDetencion
-  );
-  //Guardado en colección alambiques, datos tomados desde store y modificados con findAlambiqueByNameAndStopIt
-  await setDoc(
-    doc(db, "alambiques", detencion.getAlambique.numero),
-    detencion.getAlambique
-  );
+
+  //Enviar correo
   if (detencion.getDetencion.causaDetencion !== "detención programada") {
-    // //Enviar correo
     emailjs
       .send(
         "service_l5hg039",
@@ -85,6 +76,18 @@ const reportarDetencion = async () => {
         }
       );
   }
+
+  //Guardado en colección detenciones, daatos tomados desde el objeto detenciones de esta vista.
+  await setDoc(
+    doc(db, "detenciones", detencion.getDetencion.id),
+    detencion.getDetencion
+  );
+
+  //Guardado en colección alambiques, datos tomados desde store y modificados con findAlambiqueByNameAndStopIt
+  await setDoc(
+    doc(db, "alambiques", detencion.getAlambique.numero),
+    detencion.getAlambique
+  );
 };
 
 async function restablecer(nombreAlambique) {

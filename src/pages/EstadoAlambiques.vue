@@ -154,22 +154,6 @@
         </div>
       </q-form>
     </template>
-
-    <!-- Diálogo  confirmación detención -->
-
-    <q-dialog persistent v-model="mostrarDialogo">
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="ion-hand" color="negative" text-color="white" />
-          <span class="q-ml-sm">holi</span>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancelar" color="warning" @click="cancelar" />
-          <q-btn flat label="Notificar" color="positive" @click="aceptar" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </CRUDdetencion>
 </template>
 
@@ -197,7 +181,6 @@ const alambiques = useAlambiques();
 const usuario = useUsuarios();
 const mostrar = ref(false);
 const filter = ref("");
-const mostrarDialogo = ref(true);
 const pag = {
   sortBy: "desc",
   descending: false,
@@ -280,7 +263,6 @@ function detencion(registro) {
 function cancelar() {
   mostrar.value = false;
   alambiques.resetDetencion();
-  mostrarDialogo.value = false;
 }
 
 onMounted(() => {
