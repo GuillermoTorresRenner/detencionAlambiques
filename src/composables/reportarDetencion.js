@@ -69,21 +69,21 @@ const reportarDetencion = async () => {
   );
   if (detencion.getDetencion.causaDetencion !== "detención programada") {
     // //Enviar correo
-    // emailjs
-    //   .send(
-    //     "service_l5hg039",
-    //     "template_u5hv00r",
-    //     detencion.value,
-    //     "jziiXN-P-NsRg8J7J"
-    //   )
-    //   .then(
-    //     function (response) {
-    //       console.log("SUCCESS!", response.status, response.text);
-    //     },
-    //     function (error) {
-    //       console.log("FAILED...", error);
-    //     }
-    //   );
+    emailjs
+      .send(
+        "service_l5hg039",
+        "template_u5hv00r",
+        detencion.getDetencion,
+        "jziiXN-P-NsRg8J7J"
+      )
+      .then(
+        function (response) {
+          console.log("SUCCESS!", response.status, response.text);
+        },
+        function (error) {
+          console.log("FAILED...", error);
+        }
+      );
   }
 };
 

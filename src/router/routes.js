@@ -18,8 +18,12 @@ const routes = [
         component: () => import("src/pages/ReportesDetenciones.vue"),
       },
       {
-        path: "/estado-salas",
-        component: () => import("src/pages/EstadoSalas.vue"),
+        path: "/bienvenida",
+        component: () => import("src/pages/PaginaBienvenida.vue"),
+      },
+      {
+        path: "/usuarios",
+        component: () => import("src/pages/GestionUsuarios.vue"),
       },
     ],
   },

@@ -12,9 +12,8 @@
         />
 
         <q-toolbar-title class="text-center">
-          {{ usr.getUsuario.sala.toUpperCase() }}
-          {{ usr.getUsuario.nombre.toUpperCase() }}
-        </q-toolbar-title>
+          {{ usr.getUsuario.nombre }} {{ usr.getUsuario.sala }}</q-toolbar-title
+        >
         <q-btn
           color="negative"
           icon="ion-log-out"
@@ -75,6 +74,21 @@
 
             <q-item-section class="text-warning">
               Reportes Detenciones
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            clickable
+            v-ripple
+            to="/usuarios"
+            v-if="usr.getUsuario.rol === 'administrador'"
+          >
+            <q-item-section avatar>
+              <q-icon name="ion-person" color="white" />
+            </q-item-section>
+
+            <q-item-section class="text-white">
+              Gestión de Usuarios
             </q-item-section>
           </q-item>
         </q-list>

@@ -2,7 +2,7 @@
   <q-page>
     <div class="container">
       <div class="row justify-end">
-        <strong class="q-mt-md q-mr-xl text-overline">V 0.01</strong>
+        <strong class="q-mt-md q-mr-xl text-overline">V 1.1.0</strong>
       </div>
       <div class="row justify-center"></div>
       <h4 class="text-center text-primary text-center">
@@ -50,13 +50,12 @@
 </template>
 
 <script setup>
-import { defineComponent, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { db, auth } from "src/boot/firebase";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { useUsuarios } from "../stores/useUsuarios";
 import { useRouter } from "vue-router";
 import { useAuth } from "@vueuse/firebase/useAuth";
-import { LocalStorage } from "quasar";
 
 const { isAuthenticated, user } = useAuth(auth);
 
@@ -72,9 +71,12 @@ const ingresar = async () => {
       .then((userCredential) => {
         // Signed in
         const uid = userCredential.user.uid;
-        usuario.findUsuario(uid);
-
-        router.push("/estado-alambiques");
+        try {
+          usuario.login(uid);
+          router.push("/bienvenida");
+        } catch (error) {
+          console.log(error);
+        }
       })
       .catch((error) => {
         const errorCode = error.code;

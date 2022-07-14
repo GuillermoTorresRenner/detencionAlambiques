@@ -307,7 +307,5 @@ onMounted(() => {
       }
     });
   });
-
-  localStorage.setItem("usuario", JSON.stringify(usuario.getUsuario));
 });
 </script>
